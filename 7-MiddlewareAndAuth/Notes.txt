@@ -1,0 +1,28 @@
+-------------------
+CREATING OUR FIRST NUXT APP
+-------------------
+
+
+-------------------
+UNDERSTANDING THE FOLDER STRUCTURE
+-------------------
+
+
+-------------------
+WHAT CAN WE BUILD WITH NUXT
+-------------------
+
+
+-------------------
+WHAT'S INSIDE THE COURSE
+-------------------
+
+
+-------------------
+HOW TO GET THE MOST OUT OF THIS COURSE 
+-------------------
+
+
+-------------------
+WHERE TO FIND SOURCE CODE 
+-------------------
