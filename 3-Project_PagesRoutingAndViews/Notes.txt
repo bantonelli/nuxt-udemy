@@ -1,20 +1,39 @@
 -------------------
-CREATING OUR FIRST NUXT APP
+MODULE INTRODUCTION 
 -------------------
+- Course Project will be a complete blog 
+    - We will gradually extend the app throughout the course 
 
-
--------------------
-UNDERSTANDING THE FOLDER STRUCTURE
--------------------
 
 
 -------------------
-WHAT CAN WE BUILD WITH NUXT
+CREATING THE MAIN SECTIONS/PAGES 
 -------------------
+MAIN ROUTE FOLDERS: 
+    - ABOUT: Static content 
+    - ADMIN: Auth related routes and admin panel 
+    - POSTS: Blog related content (Actual blog post pages)
 
 
 -------------------
-WHAT'S INSIDE THE COURSE
+ADDING EXTERNAL FONTS 
+-------------------
+- You can add CDN links for fonts in the main .html page.
+
+HOW DO YOU MODIFY THE MAIN HTML PAGE?:
+    - You can do this by adding configuration to the nuxt.config file 
+    - there is a "head" property in there which we can use to add stylesheets, meta tags, etc. 
+        - inside of there is the 'link' property which is an array 
+          of link tags that gets inserted. 
+        - This is where you can add 3rd party stylesheets 
+    - After importing a 3rd party stylesheet you have to declare the 
+      font-family one of the layouts, pages, or components 
+        - Preferably do this on the default layout so the fonts are 
+          more widely accessible. 
+
+
+-------------------
+CREATING THE LANDING PAGE 
 -------------------
 
 
