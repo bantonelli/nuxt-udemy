@@ -1,28 +1,130 @@
 -------------------
-CREATING OUR FIRST NUXT APP
+MODULE INTRODUCTION 
 -------------------
+- NUXT allows us to configure our routing very easy 
+- Spares you from writing your own route config 
+
+-------------------
+FROM FOLDERS TO ROUTES 
+-------------------
+- You can create the same structure as the route config without writing an 
+  actual config file. 
+
+APPROACH: 
+- Create top level URLs by naming the .vue file what you want 
+    EXAMPLE: pages/users.vue --> '/users' 
+- Create pages/index.vue file --> Starting component for '/' route
+- Create subfolders for other routes 
+    - pages/products/index.vue
+    - pages/products/_id/index.vue 
 
 
 -------------------
-UNDERSTANDING THE FOLDER STRUCTURE
+CREATING A ROUTE WITH A DYNAMIC PATH 
 -------------------
+- How do we create a route with a dynamic path? 
+
+FILE NAME APPROACH: 
+- Use "_" character as a prefix 
+    EXAMPLE: pages/_id.vue --> '/1', '/2', etc 
+    EXAMPLE 2: pages/users/_id.vue --> '/users/1', '/users/2', etc. 
+- With the File name approach: 
+    - Neighboring files won't need to provide the parameter 
+- With the nested folder approach:
+    - The dynamic param is ALWAYS required in the URL path.
+
+ACCESSING ROUTE PARAMS:
+- All of the regular route data is injected automatically into the component 
+  from VueJS. 
+- Behind the scenes Nuxt is using vue-router as normal. Its just creating 
+  the config for you. 
+    - Therefore, in the component template you can access $route.params as normal 
+
+
+
+-------------------
+ADDING LINKS AND NAVIGATING AROUND 
+-------------------
+- You can add normal anchor tags on the components but this
+  will cause a page reload. 
+- Instead you should use vue-router links. 
+    - <router-link to=""></router-link>
+- Can also use nuxt-links 
+    - Nuxt links come with transition animations 
+    - <nuxt-link to=""></nuxt-link>
+- Can navigate programmatically the same as you do 
+  in regular Vue.
+    - Use this.$router.push('<relativeURL>');
 
 
 -------------------
-WHAT CAN WE BUILD WITH NUXT
+ASSIGNMENT 1: PAGES AND ROUTING 
 -------------------
+1) Create two routes:
+    /products and /products/:pid 
+2) Add a button to the main page. The button should 
+   navigate programmatically to /products 
+3) Add two links to the /products page. 
+    - Links should go to /products/1 and /products/2
+4) Output the product id in on the /products/:pid page
 
 
 -------------------
-WHAT'S INSIDE THE COURSE
+VALIDATING PARAMETERS 
 -------------------
+NUXT PAGE COMPONENTS: 
+- Page components get special properties in the Vue instance.
+    - This is in addition to the default Vue instance properties 
+- One additional property: 'validate' 
+    - Nuxt gives you access to this which allows you to 
+    build-in URL parameter validation 
+
+VueInstance.validate({params, store, query}):
+    - Params on the object passed has the route params 
+    - This function should return true upon successful 
+      validation and false when failing. 
+    - If validate returns false the route will not load. 
 
 
 -------------------
-HOW TO GET THE MOST OUT OF THIS COURSE 
+CREATING NESTED ROUTES 
 -------------------
+- Load content from one page into another (like partials)
 
+HOW TO DO THIS:
+- Create a route in pages/
+    EXAMPLE: pages/nested.vue
+- Create a folder in pages/ with the same name as the route 
+    - This folder will be treated as the "child folder"
+        - Any components in here will be accessible to 
+        the main route via the nuxt-child tag 
+    EXAMPLE: 
+        pages/nested.vue 
+        pages/nested/index.vue
+- Use nuxt-child tag in the main route (similar to router-view)
+    - Like router-view this can take a name or not 
+    - If you DONT use a name it will load the index.vue 
+    of the child folder by default. 
+- In the child index you can then load in other children 
+  dynamically by using the same pattern just deeper in the 
+  directory tree. 
+    EXAMPLE: 
+        pages/nested.vue 
+        pages/nested/index.vue
+        pages/nested/another.vue 
+        pages/nested/another/index.vue 
+        
+        URL: /nested 
+        - This will load nested which loads its child index 
+
+        URL: /nested/another 
+        - This will load nested 
+        - Nested will ignore its own index.vue and 
+          load in another.vue 
+        - Another (needs nuxt-child tag) loads its child index 
+            
 
 -------------------
-WHERE TO FIND SOURCE CODE 
+LAYOUT PAGES AND COMPONENTS THEORY 
 -------------------
+- 

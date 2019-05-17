@@ -1,28 +1,84 @@
 -------------------
 CREATING OUR FIRST NUXT APP
 -------------------
+USING create-nuxt-app CLI: 
+    - It has a github page  
+    - Can install via npm 
+    1) npm install -g create-nuxt-app 
+    2) Navigate to appropriate project directory 
+    3) create-nuxt-app <nameOfApp> 
+    4) Go through prompts (NONE OF THESE ARE REQUIRED - you just have the option)
+        - You can choose server frameworks (for integrations)
+        - We will get to this later (for now choose 'none')
+        - Choose either 'Universal' or 'SPA' 
+            - Universal is for SSR apps 
+        - You can also preinstall axios for HTTP requests 
+        - Also given an option to enable linter and prettier 
 
 
 -------------------
 UNDERSTANDING THE FOLDER STRUCTURE
 -------------------
+ASSETS/
+    - Storing images and stuff
+    - Handled with webpack
+
+COMPONENTS/
+    - Ordinary Vue components
+
+LAYOUTS/
+    - Page layouts
+
+MIDDLEWARE/
+    - Middleware
+
+PAGES/
+    - The heart of the Nuxt project
+    - Nuxt is all about configuring the project through folders and files 
+    - You name and set everything up by using pre-specified folder names 
+        - The filenames themselves are important too 
+    - The files here are single-file Vue components 
+
+PLUGINS/
+    - Added functionality 
+
+STATIC/
+    - Static assets NOT HANDLED BY WEBPACK 
+
+STORE/
+    - Can be used to add a Vuex store 
+
+nuxt.config.js:
+    - Various global config for the nuxt app. 
 
 
 -------------------
 WHAT CAN WE BUILD WITH NUXT
 -------------------
+1) Universal apps  
+    - First view is dynamically rendered on the server 
+    - After first load, Application turns into a SPA 
+        - This is great for SEO         
+2) Single Page App 
+    - App starts after first load 
+    - App stays SPA 
+        - Nuxt just simplifies the Vue development 
+3) Static App 
+    - You can pre-render all views 
+        - You generate a static page 
+    - After first load, Application turns into a SPA
+    - Downside is that you have to rerender after you update the app features. 
+        - Also great for SEO 
 
 
 -------------------
 WHAT'S INSIDE THE COURSE
 -------------------
-
+- Alot of stuff. (see section titles basically)
 
 -------------------
 HOW TO GET THE MOST OUT OF THIS COURSE 
 -------------------
-
-
--------------------
-WHERE TO FIND SOURCE CODE 
--------------------
+- Watch the videos
+- Make sure to code along side the instructor
+    - Debug code own my own first. 
