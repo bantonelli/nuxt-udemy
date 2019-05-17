@@ -122,9 +122,84 @@ HOW TO DO THIS:
         - Nested will ignore its own index.vue and 
           load in another.vue 
         - Another (needs nuxt-child tag) loads its child index 
-            
+
 
 -------------------
-LAYOUT PAGES AND COMPONENTS THEORY 
+LAYOUTS, PAGES, & COMPONENTS  
 -------------------
-- 
+LAYOUTS: 
+- The layout is the main wrapping element on the page 
+- You have a layout in Nuxt Apps 
+    - And every page is loaded into that layout 
+    - This allows a shared functionality system between pages and shared styles 
+
+PAGES: 
+- Pages can be children of other pages. 
+- Otherwise are simply Vue components 
+
+
+
+-------------------
+ADDING A NEW LAYOUT 
+-------------------
+- Go to layouts/default.vue 
+    - This file is the default wrapper for all other pages. 
+    - This file uses the <nuxt /> component 
+    - All this component does is load in the Nuxt app at this point. 
+    - This is simply a normal Vue component 
+    - You can put default/global styling for the site on this layout file. 
+- CREATING A SECOND LAYOUT: 
+    - In the same directory just create a new .vue file 
+    - Be sure to use the <nuxt /> component as it is used in the default layout 
+    
+    - USING A DIFFERENT LAYOUT:
+        - In the page where you want to use the new layout:
+            - On the Vue instance set the 'layout' property 
+            - This is a property injected into each page instance via Nuxt 
+        - EXAMPLE: 
+        // <nameOfLayout> should match the name of the .vue file (<nameOfLayout>.vue)
+        export default {
+            data() {
+                return {...}
+            },
+            layout: '<nameOfLayout>'
+        }
+
+
+-------------------
+ADDING A DEFAULT ERROR PAGE 
+-------------------
+- There is another specially-named layout (aside from default.vue)
+    - This is called error.vue 
+
+- You can use error.vue to load whenever the vue application throws an error. 
+    - Use it as a normal layout file. 
+
+
+
+-------------------
+WORKING WITH "NORMAL" COMPONENTS 
+-------------------
+- You can import components into pages by using this path: 
+    '~/components/<nameOfComponent>.vue'
+    - When working in the Nuxt environment the ~ sign points to the 
+      root folder of the project. 
+        - You can also use the @ symbol which does the same thing as ~
+- Otherwise using Components is virtually the same as Vanilla Vue.js 
+    - Just put all of the component files into the /components folder. 
+
+
+
+-------------------
+STYLING NUXT APPS  
+-------------------
+- You can add styling directly to the page. 
+- Any styles on a page should be scoped to that page as appropriate. 
+- You can add non-scoped styles to the /assets directory 
+    1) Typically you would create /assets/styles/main.css here 
+        - the names here don't matter really as long as its inside /assets 
+    2) Go to nuxt.config.js file and go to the 'css:[]' property 
+        - This is an array of paths that should be loaded into the 
+          final application build. 
+        - EXAMPLE: css: ['~/assets/styles/main.css']
+        - Now every page will load these global styles 
