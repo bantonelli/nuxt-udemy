@@ -1,8 +1,19 @@
 <template>
     <div class="posts-page">
-        <nuxt /> 
+        <PostList />
     </div>
 </template>
+
+<script>
+import PostList from '~/components/Posts/PostList'
+
+export default {
+    components: {
+        PostList
+    }    
+}
+</script>
+
 
 <style scoped>
     .posts-page {

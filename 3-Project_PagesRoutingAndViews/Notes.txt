@@ -35,13 +35,89 @@ HOW DO YOU MODIFY THE MAIN HTML PAGE?:
 -------------------
 CREATING THE LANDING PAGE 
 -------------------
+- Basically just added styles and markup 
 
 
 -------------------
-HOW TO GET THE MOST OUT OF THIS COURSE 
+SPLITTING THE PAGE INTO COMPONENTS 
 -------------------
+- Set up components as per vanilla VueJS in components/ directory 
+- Import them in the pages 
+- Use them as you would in vanilla VueJS 
 
 
 -------------------
-WHERE TO FIND SOURCE CODE 
+ADDING STATIC ASSETS - THE BACKGROUND IMAGE 
 -------------------
+- For most images we will be using a file-hosting service 
+like AmazonS3 
+    - In this scenario we would just store the URL to the hosted 
+    file in the database. 
+	- Then we use that URL to fetch the image 	
+	- However how do we store static assets? 
+
+USING STATIC ASSETS: 
+- In ~/assets put a folder to store images (can be named anything)
+	EXAMPLE: ~/assets/images/myimage.png 
+- Then access files in this path in a background-image: url('');: 
+			 // Leave off first slash ***** 
+	EXAMPLE: background-image: url('~assets/images/myimage.png');
+
+
+
+-------------------
+ADDING THE HEADER COMPONENT  
+-------------------
+- Basically just added a normal component that emits an event.
+	- You can respond to events in the layout component itself. 
+
+
+
+-------------------
+VUE ROUTER VS. NUXT ROUTER 
+-------------------
+- By default nuxt-links add a class to the route currently on. 
+- You can then style this class: 'nuxt-link-active'
+- The Nuxt router just uses the vue-router behind the scenes 
+	- All of the normal properties can be accessed. 
+
+
+
+-------------------
+WORKING ON THE POST PAGE 
+-------------------
+- This was mostly about workflow in VueJS and Nuxt
+- The goal is to consolidate and modularize components as much 
+  as possible, while making everything still make sense in 
+  context of the overall app design. 
+
+
+
+-------------------
+CREATING AN ADMIN SECTION 
+-------------------
+- In this section we added a form 
+- The form allows us to either edit a post or create a new post
+  depending on the isAdmin prop.
+	- If isAdmin is true we will use the 'edit' version of the 
+	  form (populated with post info) 
+	  	- Otherwise the form will be blank.
+
+
+
+-------------------
+IMPROVING THE APP
+-------------------
+- Added an auth form that can toggle between 'register' and 'login'. 
+
+
+
+-------------------
+ADDING A SEPARATE LAYOUT TO THE ADMIN AREA 
+-------------------
+- Create /layouts/admin.vue 
+- Include this on all admin pages individually using the 
+  'layout' property of the Vue instance. 
+- Also added a default error page. (/layouts/error.vue)
+****** BE SURE TO USE A REGULAR ANCHOR LINK ON THE ERROR LAYOUT 
+	- The nuxt links may not work if you've reached this point. 
