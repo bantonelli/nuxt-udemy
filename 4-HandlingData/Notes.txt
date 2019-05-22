@@ -26,3 +26,37 @@ HOW TO GET THE MOST OUT OF THIS COURSE
 -------------------
 WHERE TO FIND SOURCE CODE 
 -------------------
+
+-------------------
+ADDING THE VUEX STORE 
+-------------------
+- Every time we navigate around we have to wait for the asyncData 
+  calls to finish for the pages to load. 
+- Sometimes you want to fetch data and load it into the Vuex Store to 
+  shorten loading times or make it available to other components 
+
+- ADDING VUEX: 
+    1) Installing: The package already comes installed with NuxtJS 
+    2a) Classic Mode Approach: 
+        - Create a index.js file in ~/store 
+        - One store and module for the app 
+        - Define mutations, actions and getters in index.js 
+    2b) Modules Mode Approach: 
+        - Create multiple .js files in ~/store 
+        - Every .js file becomes a namespaced module  
+            - Essentially you can slice your store up into multiple smaller modules 
+    3) Create a function in the ~/store/index.js file 
+        - This function will be responsible for returning 
+          a new Vuex.Store() instance. 
+        - We take this approach because we want the function 
+          to be callable by Nuxt 
+            - If we returned an object instead of this function 
+              all users would get the same instance of the store. 
+            - This is because Nuxt runs the store on the 
+              server-side. 
+        - All you have to do is set up the Vuex Store as normal 
+          and return it as an instance. 
+    4) Export the function that returns a new store as the 
+       default export. 
+        - Nuxt will take it from here and inject the store into 
+          all of the project components 
