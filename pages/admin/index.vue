@@ -12,14 +12,8 @@
 
 <script>
 import PostList from '~/components/Posts/PostList';
-<<<<<<< HEAD
 import AppButton from '~/components/UI/AppButton';
 import setTimeoutPromise from '~/middleware/setTimeoutPromise.js';
-||||||| merged common ancestors
-import AppButton from '~/components/UI-Components/AppButton';
-=======
-import AppButton from '~/components/UI/AppButton';
->>>>>>> 91b243b4a151bd7169ccb322d4214cd88edaa668
 
 export default {
     components: {
