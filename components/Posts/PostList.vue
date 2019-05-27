@@ -1,30 +1,19 @@
 <template>
 	<section class="post-list">
 		<post-preview
-		:id="'1'"
-		:is-admin="isAdmin"
-		:title="'Title of Post'"
-		:preview-text="'First Post'"
-		:thumbnail="'https://static.techspot.com/images2/news/bigimage/2018/07/2018-07-10-image-35.jpg'"
-		></post-preview>
-		<post-preview
-		:id="'2'"
-		:is-admin="isAdmin"
-		:title="'Title of Post'"
-		:preview-text="'Second Post'"
-		:thumbnail="'https://static.techspot.com/images2/news/bigimage/2018/07/2018-07-10-image-35.jpg'"
-		></post-preview>
-		<post-preview
-		:id="'3'"
-		:is-admin="isAdmin"
-		:title="'Title of Post'"
-		:preview-text="'Third Post'"
-		:thumbnail="'https://static.techspot.com/images2/news/bigimage/2018/07/2018-07-10-image-35.jpg'"
+			v-for="post in posts"
+			:is-admin="isAdmin"
+			:key="post.id"
+			:id="post.id"
+			:title="post.title"
+			:preview-text="post.previewText"
+			:thumbnail="post.thumbnail"
 		></post-preview>
 	</section>
 </template>
 
 <script>
+// 'https://static.techspot.com/images2/news/bigimage/2018/07/2018-07-10-image-35.jpg'
 import PostPreview from '~/components/Posts/PostPreview'
 
 export default {
@@ -35,6 +24,10 @@ export default {
 	  isAdmin: {
 		  type: Boolean,
 		  default: false
+	  },
+	  posts: {
+		  type: Array, 
+		  required: true 
 	  }
   }
 }

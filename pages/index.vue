@@ -3,18 +3,26 @@
     <section class="intro">
       <h1>Get the Latest Tech News!</h1>
     </section>
-    <PostList />
+    <PostList :posts="loadedPosts"/>
   </div>
 </template>
 
 <script>
-import PostList from '~/components/Posts/PostList'
+import PostList from "~/components/Posts/PostList";
+import setTimeoutPromise from '~/middleware/setTimeoutPromise';
 
 export default {
-    components: {
-        PostList
-    }    
-}
+  components: {
+    PostList
+  },
+  data() {
+    return {};
+  },
+  async asyncData(context) {
+    let data = await setTimeoutPromise();
+	return { loadedPosts: data.loadedPosts };	
+  }
+};
 </script>
 
 <style>
@@ -23,7 +31,7 @@ export default {
   position: relative;
   padding: 30px;
   box-sizing: border-box;
-  background-image: url('~assets/images/main-page-background.jpg');
+  background-image: url("~assets/images/main-page-background.jpg");
   background-position: center;
   background-size: cover;
 }

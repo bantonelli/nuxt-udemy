@@ -1,28 +1,146 @@
 -------------------
-CREATING OUR FIRST NUXT APP
+MODULE INTRODUCTION 
 -------------------
+- Time to add dynamic data!
+
+GOALS: 
+    - Add data to the JavaScript on the Server-Side 
+    - This won't be data from database or API yet however 
+    - We will set it up as if it were coming from a backend
+    - We will look at how Vuex connects to this 
+    - Start to explore Server-side rendering 
 
 
 -------------------
-UNDERSTANDING THE FOLDER STRUCTURE
+ADDING DYNAMIC DATA 
 -------------------
+- GOAL: 
+    - Extract data outside of the component level objects 
+    - All data should be supplied by the page(s) that the component 
+      is being used on. 
 
 
 -------------------
-WHAT CAN WE BUILD WITH NUXT
+PREPARING DATA ON THE SERVER-SIDE (through Nuxt)
 -------------------
+- Nuxt is NOT a server-side framework which can connect 
+  to a database perse. 
+    - However, it has ways to call certain scripts on the 
+      client's server. 
+
+PROBLEM: 
+- In a normal Vue app you would fetch data in the 
+  created() lifecycle hook.
+    - Most likely you would reach out directly to a backend 
+      server/API. 
+    - This operation happens and loads on the client because 
+      the client has to wait for the created hook to return 
+      data asynchronously 
+    - Any web crawler would miss out on all of this data. 
+    - This is BAD FOR SEO ***** 
+
+NUXT SOLUTION: asyncData(context, callback) 
+- Nuxt provides a special method for loading async data 
+  to 'page-level' components ONLY. 
+
+- Nuxt will execute this method on the server *****
+    - Nuxt will wait for the process in async data to finish 
+    - This ensures that the client gets a fully rendered page 
+      since the data has finished being fetched BEFORE mounting
+    - Since this data is fetched BEFORE CREATED it will NOT 
+      HAVE ACCESS TO 'this' keyword. 
+        - 'this' will NOT reference the Vue instance as normal.
+
+- It has a similar function signature as the normal data() 
+      method provided by Vue instances. 
+    - It has to ultimately return an object
+    - To get access to the returned object (<returnValue>)
+        1) Return a promise and resolve it with the <returnValue>
+        2) call the "callback" parameter and pass the return 
+           value to it. (Deprecated)
+            - Similar to done() in mocha, this callback lets 
+              Nuxt know the method is done 
+            - EXAMPLE: 
+                callback(null, <returnValue>)
+        3) Use async/await 
+            - EXAMPLE: 
+                async asyncData(context) {
+                    let { data } = await axios.get(`https://my-api/posts/${params.id}`)
+                    return { title: data.title }
+                }
+    - Once the process is triggered as complete: 
+        - The <returnValue> is usable in the template. 
 
 
 -------------------
-WHAT'S INSIDE THE COURSE
+ASSIGNMENT 2: SERVER-SIDE DATA 
 -------------------
+- Finished this 
+- Was basically a practice run for async data method 
 
 
 -------------------
-HOW TO GET THE MOST OUT OF THIS COURSE 
+ASYNC DATA ON CLIENT & SERVER 
 -------------------
+- With our current set up, no server-side rendering is being 
+  performed AFTER the first page load. 
+    - If the first page has been loaded already we are in 
+      SPA mode. 
+
+- TESTING SERVER SIDE EXECUTION: 
+    - If you put console.log statements you can see 
+      that depending on which console logs the message. 
+    - IF SERVER EXECUTION: 
+        - you will see --> NODE CONSOLE MESSAGE. 
+    - IF CLIENT EXECUTION:
+        - you will see --> BROWSER CONSOLE MESSAGE. 
+
+***** KEY TAKEAWAY ***** 
+- Async data is something we ALWAYS wait for BUT: 
+    - It does not always run on the server. 
 
 
 -------------------
-WHERE TO FIND SOURCE CODE 
+A CLOSER LOOK AT THE CONTEXT OBJECT 
 -------------------
+- The context object has a lot of uses
+- It is passed as the first parameter to asyncData(context)
+
+WHAT IT CONTAINS:
+    - isServer, isClient
+        - This is deprecated in latest version use 
+          process.client instead 
+    - isStatic 
+    - isDev (development mode or not)
+    - env (environment variables)
+    - store (vuex store)
+    - redirect() 
+        - Function which allows us to redirect 
+    - ALSO CONTAINS ROUTER/ROUTE PROPERTIES
+        - route 
+            - Contains all of the route properties 
+        - params (alias for route.params)
+            - Very useful since we don't get access to the 
+            this.$route variable inside of asyncData.
+        
+
+
+-------------------
+ADDING ASYNC DATA TO A SINGLE POST 
+-------------------
+- Added a Promise based use of asyncData to posts/id page. 
+    - All you have to do is call .then() and .catch right inside 
+    - If it resolves the data will be loaded 
+    - Otherwise if an error occurs just put a .catch handler and call 
+      context.error(new Error())
+        - By doing this Nuxt will automatically redirect us to the error.vue layout 
+          if there is an error. 
+
+
+
+-------------------
+USING PROMISES IN ASYNCDATA 
+-------------------
+- To use promises you have to NOT pass the callback as the second param 
+  to asyncData.
+- To test errors just call reject() 

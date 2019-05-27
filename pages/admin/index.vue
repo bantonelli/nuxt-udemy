@@ -5,21 +5,26 @@
         </section>
         <section class="existing-posts">
             <h1>Existing Posts</h1>
-            <PostList :is-admin="true"/>
+            <PostList :is-admin="true" :posts="loadedPosts" />
         </section>
     </div>
 </template>
 
 <script>
 import PostList from '~/components/Posts/PostList';
-import AppButton from '~/components/UI-Components/AppButton';
+import AppButton from '~/components/UI/AppButton';
+import setTimeoutPromise from '~/middleware/setTimeoutPromise.js';
 
 export default {
     components: {
         PostList,
         AppButton
     },
-    layout: 'admin'
+    layout: 'admin',
+    async asyncData() {
+        let data = await setTimeoutPromise();
+        return { loadedPosts: data.loadedPosts };
+    }
 }
 </script>
 

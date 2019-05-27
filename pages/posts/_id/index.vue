@@ -1,18 +1,50 @@
 <template>
     <div class="single-post-page">
         <section class="post">
-            <h1 class="post-title">Title of the post</h1>
+            <h1 class="post-title">{{ loadedPost.title }}</h1>
             <div class="post-details">
-                <div class="post-detail">Last Updated on XXX</div>
-                <div class="post-detail">Written by NAME</div>
+                <div class="post-detail">Last Updated on {{loadedPost.updatedDate}}</div>
+                <div class="post-detail">Written by {{loadedPost.author}}</div>
             </div>
-            <p class="post-content">Content of the Post</p>
+            <p class="post-content">{{loadedPost.content}}</p>
         </section>
         <section class="post-feedback">
             <p>Let me know what you think about the post, send a mail to <a href="mailto:feedback@mydomain.com">feedback@mydomain.com</a></p>
         </section>
     </div>
 </template>
+
+<script>
+export default {
+    asyncData(context) {
+		return new Promise((resolve, reject) => {
+			setTimeout(() => {
+				var post = {
+					id: "1",
+					author: "Brandon",
+					updatedDate: new Date(),
+					title: "First Post (ID: " + context.params.id + ")",
+					previewText: "This is our first post!",
+					content: 'Some dummy text which is definitely not the preview text though!',
+					thumbnail: "https://static.techspot.com/images2/news/bigimage/2018/07/2018-07-10-image-35.jpg"	
+				};
+				if (context.params.id == post.id) {
+					resolve(post);
+				} else {
+					reject(new Error("IDs Don't Match!"));					
+				}
+			}, 1000);
+		})
+		.then((result) => {
+			return { loadedPost: result };
+		})
+		.catch((error) => {
+			context.error(error);
+		});
+	}
+}
+</script>
+
 
 <style scoped>
 .single-post-page {

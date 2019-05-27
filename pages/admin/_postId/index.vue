@@ -22,7 +22,8 @@ export default {
                 content: "WOW this is super amazing thanks for that!"
             }
         }
-    }
+    },
+    layout: 'admin'
 };
 </script>
 
