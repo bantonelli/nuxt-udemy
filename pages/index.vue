@@ -18,10 +18,15 @@ export default {
   data() {
     return {};
   },
-  async asyncData(context) {
-    let data = await setTimeoutPromise();
-	return { loadedPosts: data.loadedPosts };	
+  computed: {
+    loadedPosts() {
+      return this.$store.getters.loadedPosts;
+    }
   }
+  // async asyncData(context) {
+  //   let data = await setTimeoutPromise();
+	// return { loadedPosts: data.loadedPosts };	
+  // }
 };
 </script>
 

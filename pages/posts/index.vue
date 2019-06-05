@@ -12,15 +12,15 @@ export default {
     components: {
         PostList
     },
-    async fetch (context) {
-        if (context.store.state.loadedPosts.length !== 0) {
-            let data = await setTimeoutPromise();
-            context.store.dispatch('setPosts', data.loadedPosts);
-        } else {
-            return null;
-        }
-        // return { loadedPosts: data.loadedPosts };
-    },
+    // async fetch (context) {
+    //     if (context.store.state.loadedPosts.length !== 0) {
+    //         let data = await setTimeoutPromise();
+    //         context.store.dispatch('setPosts', data.loadedPosts);
+    //     } else {
+    //         return null;
+    //     }
+    //     // return { loadedPosts: data.loadedPosts };
+    // },
     computed: {
         loadedPosts () {
             return this.$store.getters.loadedPosts;

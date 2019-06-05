@@ -1,4 +1,5 @@
 import Vuex from 'vuex';
+import setTimeoutPromise from '~/middleware/setTimeoutPromise';
 
 const createStore = () => {
     return new Vuex.Store({
@@ -11,6 +12,12 @@ const createStore = () => {
             }
         }, 
         actions: {
+            nuxtServerInit(vuexContext, context) {
+                return setTimeoutPromise()
+                .then((data) => {
+                    vuexContext.commit('setPosts', data.loadedPosts);
+                });
+            },
             setPosts(vuexContext, posts) {
                 vuexContext.commit('setPosts', posts);
             }

@@ -201,6 +201,20 @@ FETCH METHOD:
             - Because it doesn't return data you can't reference 
               any return value in the template as you would with 
               asyncData()
+    - What it's good for: 
+        - You don't want to load data into the component directly 
+        - You want to prepopulate the store.  
+    - Downsides: 
+        - When you have already went to the page it will try and 
+          re-fetch the same data . 
+        - Therefore you should implement a condition that checks 
+          if the data has already been fetched. 
+            - This would be implemented in the component's fetch 
+              method directly. 
+            EXAMPLE: 
+              if (context.store.state.thingThatsLoaded) {
+                  return null;
+              } else { // normal fetch logic }
 
 LOADING DATA ON THE SERVER: 
     PROBLEM: 
@@ -209,6 +223,29 @@ LOADING DATA ON THE SERVER:
             - Upon first page load the data needs to be fetched 
             - But subsequent visits to the page shouldn't re-fetch 
             data necessarily. 
-    SOLUTION:     
+    SOLUTION: nustServerInit()
         - Special method to execute logic on the server-side 
-            - This method
+            - This method can be used to initialize the store 
+              with data. 
+            - The method will automatically run on the server ONE TIME ONLY!
+        - This is an action provided by Nuxt
+        - API: 
+            - nuxtServerInit(vuexContext, context)
+            - vuexContext: the normal context object from Vuex 
+                - Has commit() method 
+            - context: this is the same context object that 
+              asyncData gets from Nuxt 
+                - Contains information about the environment
+                - Has the router on it too. 
+                - etc. 
+
+WRAP UP: 
+  - Basically you can load data in different ways. 
+    - You can use any one of these methods or mix and match as needed.
+  1) Load data asynchronously within a page component: asyncData()
+    - Only need data on a specific page 
+  2) Load it into the store via component: fetch()
+    - If you need data in more than one page 
+      -> put it in the store after fetched  
+  3) Initialize data into the store: nuxtServerInit()
+    - If you need application-wide data  
