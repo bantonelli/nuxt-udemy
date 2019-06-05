@@ -179,3 +179,36 @@ ADDING THE VUEX STORE
        default export. 
         - Nuxt will take it from here and inject the store into 
           all of the project components 
+
+
+-------------------
+VUEX, fetch(), AND nuxtServerInit() 
+-------------------
+- Instead of calling an action in a component to set 
+  data to the store, and calling asyncData(), what other options are 
+  there? 
+
+FETCH METHOD: 
+    - Special method added by Nuxt
+    - Its API is similar to asyncData
+        - It gets the same context object as an argument 
+        - It runs on the server the first time 
+        - You have to return a Promise 
+    - Differences: 
+        - Don't return the data in the .then() case 
+            - Instead you should store the data in the $store 
+            - You can commit a mutation at this point. 
+            - Because it doesn't return data you can't reference 
+              any return value in the template as you would with 
+              asyncData()
+
+LOADING DATA ON THE SERVER: 
+    PROBLEM: 
+        - How can you control when to trigger a fetch call? 
+            EXAMPLE: 
+            - Upon first page load the data needs to be fetched 
+            - But subsequent visits to the page shouldn't re-fetch 
+            data necessarily. 
+    SOLUTION:     
+        - Special method to execute logic on the server-side 
+            - This method
