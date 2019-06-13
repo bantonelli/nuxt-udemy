@@ -1,17 +1,26 @@
 <template>
   <div class="admin-new-post-page">
     <section class="new-post-form">
-        <AdminPostForm />
+        <AdminPostForm @submit="onSubmitted"/>
     </section>
   </div>
 </template>
 
 <script>
 import AdminPostForm from '~/components/Admin/AdminPostForm';
+import axios from 'axios';
 
 export default {
     components: {
         AdminPostForm
+    },
+    methods: {
+        onSubmitted(newPost) {
+            axios.post('https://nuxt-blog-e14fc.firebaseio.com/posts.json', newPost)
+            .then((res) => {
+                console.log(res);
+            });
+        }
     },
     layout: 'admin'
 };

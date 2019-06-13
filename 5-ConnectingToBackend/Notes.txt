@@ -1,21 +1,81 @@
 -------------------
-CREATING OUR FIRST NUXT APP
+EXECUTING CODE ON THE SERVER 
 -------------------
+- You can run server-side code using Nuxt 
+- You can't rely on nuxtServerInit(), asyncData(), and fetch() 
+    - These may end up running on the client since they only 
+      get executed on the server on first load. 
+
+- CHECKING IF YOU ARE RUNNING ON THE SERVER:
+    - You can use the process.client environment variable 
+      to see if the code is executing on the client-side. 
+    - EXAMPLE: 
+        if (!process.client) {
+            ...
+            // Run some server-side logic 
+            ...
+        }
+**** ASIDE: nuxtServerInit(vuexContext, context)
+    - The 'context' argument passed by Nuxt actually contains 
+      the request object that was made to the nuxt server 
+    - The request object is basically a standard Express request. 
+        -> context.req 
+        -> context.req.session
+    - So once the client refreshes and calls nuxtServerInit, the 
+      request made to do so is made available to us. 
+
+- GOALS: 
+    - How can we reach out to a separate backend? 
+    - We are using the approach where the Nuxt server is hosted 
+      separately from the backend. 
 
 
 -------------------
-UNDERSTANDING THE FOLDER STRUCTURE
+ADDING FIREBASE AS A BACKEND 
 -------------------
+- Set up a free firebase project 
+- Set up a "realtime database" in test mode with read and write 
+  access to true (so its available to everyone).
 
 
 -------------------
-WHAT CAN WE BUILD WITH NUXT
+USING FIREBASE TO STORE DATA 
 -------------------
+- Let's use firebase to store data. 
+- In AdminPostForm component 
+    - In the onSave() method you should emit an event up to 
+      the page/parent component. 
+        - We can call the event 'submit'
+
+- In the new-post page 
+    - Handle the 'submit' event emitted by the PostForm 
+    - The method should be called onSubmitted() 
+        - Use Axios to send a POST request to the Firebase backend 
+        - The firebase data store will automatically create a 
+          resource that has the name of the URL you POST to. 
+        - Send the request to /posts.json 
+            - The .json is required by Firebase 
+    - Console log the result of the request in Promise.then()
 
 
 -------------------
-WHAT'S INSIDE THE COURSE
+FETCHING DATA FROM THE BACKEND 
 -------------------
+- Let's now fetch data from the backend
+- The place we currently fetch is in nuxtServerInit()
+    - In reality you won't want to fetch all data in one step. 
+    - You may want to fetch a slice and then fetch data as the 
+      user clicks around. 
+- TASK: 
+    - replace the dummy data in nuxtServerInit() with an 
+      axios.get request that fetches data from Firebase URL 
+    - After the request:
+        - .then() 
+            - take res.data (returned by the request) and commit it 
+            into the vuex store. 
+            - convert the object into array of keys. 
+        - .catch()
+            - return error  
 
 
 -------------------

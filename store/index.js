@@ -1,5 +1,6 @@
 import Vuex from 'vuex';
 import setTimeoutPromise from '~/middleware/setTimeoutPromise';
+import axios from 'axios';
 
 const createStore = () => {
     return new Vuex.Store({
@@ -13,9 +14,23 @@ const createStore = () => {
         }, 
         actions: {
             nuxtServerInit(vuexContext, context) {
-                return setTimeoutPromise()
-                .then((data) => {
-                    vuexContext.commit('setPosts', data.loadedPosts);
+                // return setTimeoutPromise()
+                // .then((data) => {
+                //     vuexContext.commit('setPosts', data.loadedPosts);
+                // });
+                return axios.get('https://nuxt-blog-e14fc.firebaseio.com/posts.json')
+                .then((res) => {
+                    // console.log("RESPONSE DATA: ", res.data);
+                    for (const key in res.data) {
+                        // Each key is the id of a post 
+                        // Then we can extrapolate the post object via spread operator.
+                        // Push the post object onto the post array and commit 
+                        // to the Vuex store. 
+                        console.log("KEY: ", key);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
                 });
             },
             setPosts(vuexContext, posts) {
