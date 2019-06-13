@@ -18,7 +18,8 @@ const createStore = () => {
                 // .then((data) => {
                 //     vuexContext.commit('setPosts', data.loadedPosts);
                 // });
-                return axios.get('https://nuxt-blog-e14fc.firebaseio.com/posts.json')
+                var newPosts = [];
+                return axios.get('https://nuxt-blog-85ef4.firebaseio.com/posts.json')
                 .then((res) => {
                     // console.log("RESPONSE DATA: ", res.data);
                     for (const key in res.data) {
@@ -26,8 +27,10 @@ const createStore = () => {
                         // Then we can extrapolate the post object via spread operator.
                         // Push the post object onto the post array and commit 
                         // to the Vuex store. 
-                        console.log("KEY: ", key);
+                        // console.log("KEY: ", key);
+                        newPosts.push({ ...res.data[key], id: key });
                     }
+                    vuexContext.commit('setPosts', newPosts);
                 })
                 .catch((err) => {
                     console.log(err);

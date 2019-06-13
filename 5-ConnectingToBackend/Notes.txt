@@ -1,10 +1,18 @@
 -------------------
 EXECUTING CODE ON THE SERVER 
 -------------------
-- You can run server-side code using Nuxt 
-- You can't rely on nuxtServerInit(), asyncData(), and fetch() 
-    - These may end up running on the client since they only 
-      get executed on the server on first load. 
+- Now we want to connect the app to a real data source 
+- There are different ways for Nuxt to connect to a backend.
+    - The way we are focusing on is where the client app (nuxt)
+      has its own server that is separate from a backend. 
+
+NUXT ITSELF IS A SERVER THOUGH: (WHAT DOES THIS MEAN?)
+- How can you check if code is running on the server. 
+    - Use process.client to see if you are on the server 
+    - This is an environment variable provided automatically 
+- You shouldn't use nuxtServerInit() and asyncData() as a means 
+  to execute server-side code. 
+    - These only run 1 time on the server and thus are unreliable for this purpose. 
 
 - CHECKING IF YOU ARE RUNNING ON THE SERVER:
     - You can use the process.client environment variable 
@@ -79,10 +87,44 @@ FETCHING DATA FROM THE BACKEND
 
 
 -------------------
-HOW TO GET THE MOST OUT OF THIS COURSE 
+INITIALIZING OUR STORE 
 -------------------
+- Basically when we initialized our store with the data we 
+  had to make sure that the properties on the fetched objects 
+  matched what the templates/components are referencing. 
 
 
 -------------------
-WHERE TO FIND SOURCE CODE 
+FETCHING ALL POSTS
 -------------------
+- GOAL: 
+  - We want to be able to get just a subset of the data from the backend. 
+
+- SOLUTION: 
+  - in the single post page:
+    - make a get request to the backend 
+    - do this request inside of the asyncData() method 
+    - Optimally you want to hit an endpoint that has the ID of the post 
+      you wish to fetch. 
+    - Get the ID from the route parameter (context.params.id)
+    - .then(res)
+      - Get back the response and access its data (res.data)
+      - return the loadedPost property so it can be rendered by Vue. 
+    - .catch(err)
+      - Load the error page default with context.error(err)
+  - In the Admin New post form: 
+    - Add the updatedDate property -> new Date()
+    - The form component shouldn't have a new field or anything 
+      - Instead the parent should add the property 
+
+
+-------------------
+ASSIGNMENT 3: FETCHING DATA 
+-------------------
+
+
+
+-------------------
+EDITING POSTS  
+-------------------
+- 

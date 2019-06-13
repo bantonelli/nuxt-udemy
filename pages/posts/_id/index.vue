@@ -15,32 +15,42 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     asyncData(context) {
-		return new Promise((resolve, reject) => {
-			setTimeout(() => {
-				var post = {
-					id: "1",
-					author: "Brandon",
-					updatedDate: new Date(),
-					title: "First Post (ID: " + context.params.id + ")",
-					previewText: "This is our first post!",
-					content: 'Some dummy text which is definitely not the preview text though!',
-					thumbnail: "https://static.techspot.com/images2/news/bigimage/2018/07/2018-07-10-image-35.jpg"	
-				};
-				if (context.params.id == post.id) {
-					resolve(post);
-				} else {
-					reject(new Error("IDs Don't Match!"));					
-				}
-			}, 1000);
-		})
-		.then((result) => {
-			return { loadedPost: result };
-		})
-		.catch((error) => {
-			context.error(error);
-		});
+      return axios.get(`https://nuxt-blog-85ef4.firebaseio.com/posts/${context.params.id}.json`)
+      .then((res) => {
+        // console.log('RESPONSE: ', res);
+        return {loadedPost: res.data};
+      })
+      .catch((err) => {
+        return context.error(err);
+      });
+		// return new Promise((resolve, reject) => {
+		// 	setTimeout(() => {
+		// 		var post = {
+		// 			id: "1",
+		// 			author: "Brandon",
+		// 			updatedDate: new Date(),
+		// 			title: "First Post (ID: " + context.params.id + ")",
+		// 			previewText: "This is our first post!",
+		// 			content: 'Some dummy text which is definitely not the preview text though!',
+		// 			thumbnail: "https://static.techspot.com/images2/news/bigimage/2018/07/2018-07-10-image-35.jpg"	
+		// 		};
+		// 		if (context.params.id == post.id) {
+		// 			resolve(post);
+		// 		} else {
+		// 			reject(new Error("IDs Don't Match!"));					
+		// 		}
+		// 	}, 1000);
+		// })
+		// .then((result) => {
+		// 	return { loadedPost: result };
+		// })
+		// .catch((error) => {
+		// 	context.error(error);
+		// });
 	}
 }
 </script>
