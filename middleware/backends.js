@@ -1,8 +1,10 @@
-const workFirebase = 'https://nuxt-blog-85ef4.firebaseio.com/posts.json';
-const homeFirebase = 'https://nuxt-blog-e14fc.firebaseio.com/posts.json';
+const workFirebase = 'https://nuxt-blog-85ef4.firebaseio.com/';
+const homeFirebase = 'https://nuxt-blog-e14fc.firebaseio.com/';
 
+const firebase = homeFirebase;
 
-module.exports = {
+export default {
+    firebase,
     workFirebase,
     homeFirebase
-}
+};

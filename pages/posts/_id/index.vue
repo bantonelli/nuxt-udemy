@@ -15,13 +15,14 @@
 </template>
 
 <script>
+import backends from '~/middleware/backends';
 import axios from 'axios';
 
 export default {
     asyncData(context) {
-      return axios.get(`https://nuxt-blog-85ef4.firebaseio.com/posts/${context.params.id}.json`)
+      return axios.get(`${backends.firebase}posts/${context.params.id}.json`)
       .then((res) => {
-        // console.log('RESPONSE: ', res);
+        // console.log('RESPONSE: ', res.data);
         return {loadedPost: res.data};
       })
       .catch((err) => {

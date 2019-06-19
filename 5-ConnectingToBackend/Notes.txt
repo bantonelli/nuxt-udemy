@@ -121,10 +121,58 @@ FETCHING ALL POSTS
 -------------------
 ASSIGNMENT 3: FETCHING DATA 
 -------------------
-
+- Index.vue file in the admin page
+    - Connect it to the Vuex store and fetch the postList 
+      from there. 
+    - Pass the post to the postList component 
+- Move on to the PostID page 
 
 
 -------------------
 EDITING POSTS  
 -------------------
-- 
+- We want to add the ability to save updates to the backend 
+1) Add a @submit listener to the postId page 
+    - This is because the AdminPostForm emits this when you click save 
+2) Add a method to the postId page which sends a PUT request 
+   to the backend 
+    - Put the editedPost data into the request 
+    - we can access the postId via --> this.$route.params.postId 
+        - This is because we have access to the router at this 
+          point in the component lifecycle 
+3) After submitting we want to redirect via this.$router.push();
+    - The data at this point is out of sync with the store 
+
+
+-------------------
+SYNCHRONIZING VUEX AND THE BACKEND 
+-------------------
+- If you manipulate data on the backend after the application 
+    is initialized --> The store's data becomes out of sync 
+
+POSSIBLE SOLUTIONS: 
+1) Do async data calls everywhere to fetch the most up to date data 
+2) Manipulate the store directly --> THIS IS GOOD 
+
+MANIPULATING DATA IN THE STORE: MUTATIONS 
+    - If you're editing data on the backend you should have a corresponding 
+      'edit' mutation and so forth. 
+    - APPROACH -> EDIT MUTATION: 
+        - Find the post in the state using the editedPost.id 
+        - Replace the post object in the state.loadedPosts array 
+    - APPROACH -> ADD MUTATION: 
+        - Just push the new post onto the array 
+    - After defining the mutations, create corresponding actions that are 
+      callable in an asynchronous context. 
+ 
+MANIPULATING DATA IN THE STORE: ACTIONS 
+    - GENERAL CONCEPTS: 
+        - Use actions in the page-level components 
+        - Any requests to the backend should be contained within the 
+          action whenever applicable 
+            - Return the axios request so that you can chain on 
+              .then() calls within the page execution context and have 
+              access to the $router, data, etc. 
+            - When using this approach, redirects can be executed programmatically 
+              in the .then() call. 
+        - 

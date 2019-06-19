@@ -1,6 +1,7 @@
 import Vuex from 'vuex';
 import setTimeoutPromise from '~/middleware/setTimeoutPromise';
 import axios from 'axios';
+import backends from '~/middleware/backends';
 
 const createStore = () => {
     return new Vuex.Store({
@@ -19,7 +20,7 @@ const createStore = () => {
                 //     vuexContext.commit('setPosts', data.loadedPosts);
                 // });
                 var newPosts = [];
-                return axios.get('https://nuxt-blog-85ef4.firebaseio.com/posts.json')
+                return axios.get(`${backends.firebase}posts.json`)
                 .then((res) => {
                     // console.log("RESPONSE DATA: ", res.data);
                     for (const key in res.data) {

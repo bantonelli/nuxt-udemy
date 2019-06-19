@@ -9,6 +9,7 @@
 <script>
 import AdminPostForm from '~/components/Admin/AdminPostForm';
 import axios from 'axios';
+import backends from '~/middleware/backends';
 
 export default {
     components: {
@@ -16,7 +17,7 @@ export default {
     },
     methods: {
         onSubmitted(newPost) {
-            axios.post('https://nuxt-blog-85ef4.firebaseio.com/posts.json', {...newPost, updatedDate: new Date()})
+            axios.post(`${backends.firebase}posts.json`, {...newPost, updatedDate: new Date()})
             .then((res) => {
                 console.log(res);
             });

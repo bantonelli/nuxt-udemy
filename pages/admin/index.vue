@@ -21,10 +21,15 @@ export default {
         AppButton
     },
     layout: 'admin',
-    async asyncData() {
-        let data = await setTimeoutPromise();
-        return { loadedPosts: data.loadedPosts };
+    computed: {
+        loadedPosts() {
+            return this.$store.getters.loadedPosts;
+        }
     }
+    // async asyncData() {
+    //     let data = await setTimeoutPromise();
+    //     return { loadedPosts: data.loadedPosts };
+    // }
 }
 </script>
 

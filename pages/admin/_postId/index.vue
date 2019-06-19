@@ -1,26 +1,39 @@
 <template>
     <div class="admin-post-page">
         <section class="update-form">
-            <AdminPostForm :post="loadedPost" />
+            <AdminPostForm :post="loadedPost" @submit="updatePost"/>
         </section>
     </div>
 </template>
 
 <script>
 import AdminPostForm from '~/components/Admin/AdminPostForm';
+import axios from 'axios';
+import backends from '~/middleware/backends';
 
 export default {
     components: {
         AdminPostForm
     },
-    data () {
-        return {
-            loadedPost: {
-                author: "Brandon",
-                title: "My Awesome Post",
-                thumbnailLink: 'https://static.techspot.com/images2/news/bigimage/2018/07/2018-07-10-image-35.jpg',
-                content: "WOW this is super amazing thanks for that!"
-            }
+    asyncData(context) {
+        return axios.get(`${backends.firebase}posts/${context.params.postId}.json`)
+        .then((res) => {
+            return {loadedPost: res.data};
+        })
+        .catch((err) => {
+            return context.error(err);
+        });
+    },
+    methods: {
+        updatePost(editedPost) {
+            axios.put(`${backends.firebase}posts/${this.$route.params.postId}.json`, editedPost)
+            .then((res) => {
+                // console.log(res);
+                this.$router.push('/admin');
+            })
+            .catch((err) => {
+                console.log(err);
+            })
         }
     },
     layout: 'admin'
