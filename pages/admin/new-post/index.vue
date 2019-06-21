@@ -17,9 +17,9 @@ export default {
     },
     methods: {
         onSubmitted(newPost) {
-            axios.post(`${backends.firebase}posts.json`, {...newPost, updatedDate: new Date()})
-            .then((res) => {
-                console.log(res);
+            this.$store.dispatch('addPost', newPost)
+            .then(() => {
+                this.$router.push('/admin');
             });
         }
     },

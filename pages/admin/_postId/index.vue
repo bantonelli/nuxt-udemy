@@ -26,14 +26,11 @@ export default {
     },
     methods: {
         updatePost(editedPost) {
-            axios.put(`${backends.firebase}posts/${this.$route.params.postId}.json`, editedPost)
-            .then((res) => {
-                // console.log(res);
+            // console.log(this.$route.params);
+            this.$store.dispatch('editPost', {...editedPost, id: this.$route.params.postId})
+            .then(() => {
                 this.$router.push('/admin');
-            })
-            .catch((err) => {
-                console.log(err);
-            })
+            });
         }
     },
     layout: 'admin'

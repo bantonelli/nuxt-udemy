@@ -11,6 +11,15 @@ const createStore = () => {
         mutations: {
             setPosts(state, posts) {
                 state.loadedPosts = posts;
+            }, 
+            addPost(state, post) {
+                state.loadedPosts.push(post);
+            },
+            editPost(state, editedPost) {
+                const postIndex = state.loadedPosts.findIndex((post) => {
+                    return post.id === editedPost.id;
+                });
+                state.loadedPosts[postIndex] = editedPost;
             }
         }, 
         actions: {
@@ -39,6 +48,24 @@ const createStore = () => {
             },
             setPosts(vuexContext, posts) {
                 vuexContext.commit('setPosts', posts);
+            },
+            addPost(vuexContext, post) {
+                const createdPost = {...post, updatedDate: new Date()};
+                return axios.post(`${backends.firebase}posts.json`, createdPost)
+                .then((res) => {
+                    vuexContext.commit('addPost', {...createdPost, id: res.data.name});
+                });
+            },
+            editPost(vuexContext, editedPost) {
+                return axios.put(`${backends.firebase}posts/${editedPost.id}.json`, editedPost)
+                .then((res) => {
+                    // console.log(res);
+                    // this.$router.push('/admin');
+                    vuexContext.commit('editPost', editedPost);
+                })
+                .catch((err) => {
+                    console.log(err);
+                })                
             }
         },
         getters: {
