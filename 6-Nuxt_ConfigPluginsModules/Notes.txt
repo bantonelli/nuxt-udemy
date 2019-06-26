@@ -1,11 +1,39 @@
 -------------------
-CREATING OUR FIRST NUXT APP
+MODULE INTRODUCTION
 -------------------
+- Sometimes you want to add functionality to the default 
+  Nuxt framework. 
+- You can change a lot of the behavior through the config 
+  file. 
+- You can add behavior through plugins. 
 
 
 -------------------
-UNDERSTANDING THE FOLDER STRUCTURE
+THE NUXT CONFIG FILE -> nuxt.config.js  
 -------------------
+- Settings play a role in: 
+    - Content of the page 
+    - Build settings 
+    - Optimizations 
+    - etc. 
+
+- The default file comes with some settings 
+    - But there are plenty more on the Nuxt website/API reference. 
+
+SETTINGS: 
+    - mode:  
+        - 'universal' -> Take advantage of Nuxt SSR
+        - 'spa' -> No SSR 
+    - head: {}
+        - Whatever goes into this object is added to every single page's <head> in HTML. 
+        - If you want to add specific head tags to a particular   page, you can do so just: 
+            1) add the "head" property to the page.vue where 
+            you want the special tags. 
+            2) this would be just another Nuxt property which 
+            is automatically injected into the Vue instance of 
+            PAGES ONLY. 
+        
+    
 
 
 -------------------
