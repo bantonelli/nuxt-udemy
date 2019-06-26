@@ -18,7 +18,7 @@ export default {
     asyncData(context) {
         return axios.get(`${backends.firebase}posts/${context.params.postId}.json`)
         .then((res) => {
-            return {loadedPost: res.data};
+            return {loadedPost: {...res.data, id: context.params.postId}};
         })
         .catch((err) => {
             return context.error(err);

@@ -175,4 +175,18 @@ MANIPULATING DATA IN THE STORE: ACTIONS
               access to the $router, data, etc. 
             - When using this approach, redirects can be executed programmatically 
               in the .then() call. 
-        - 
+        - Whenever you are grabbing data from the backend be 
+          sure to update the vuex store at that moment 
+            - After the store is updated you can then use the 
+              store to access and manipulate that data 
+            - After being mutated use the store's actions 
+              to update the backend. 
+
+  
+-------------------
+WRAP UP  
+-------------------
+- In the Nuxt code you don't directly connect to the backend 
+  database/server code. 
+- We can do server-side code but only in specific parts of the 
+  application (initializing data, server-side rendering, etc.)
