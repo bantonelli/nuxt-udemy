@@ -77,3 +77,36 @@ config.router
             });
         }
     }
+
+
+-------------------
+ANIMATING PAGE TRANSITIONS   
+-------------------
+config.srcDir
+- Set the source directory of the Nuxt files 
+    - "where are all the source code folders for the Nuxt project" 
+    - This is like rootDir except that it doesn't require node_modules
+- Nuxt will expect folders like assets/, components/,  pages/, etc. to all 
+  be inside of the specified srcDir
+    - Meanwhile config files and node_modules are in the rootDir
+    EXAMPLE: srcDir: 'client-app/'
+
+config.transition
+- Useful for setting animations during route changes 
+- Values: 
+    - If you pass this a string it will look for CSS classes with the name 
+      of the string passed. 
+    - If you pass an object you can set sub-attributes of the transition as 
+      well as the name of the transition classes.  
+
+EXAMPLE STRING: 
+    transition: 'page'
+
+EXAMPLE OBJECT: 
+    transition: {
+        // sets the CSS classes to be .page-enter, .page-leave-to, etc. 
+        name: 'page', 
+        // makes the page fade out first and the new one come in. 
+        mode: 'out-in' 
+    }
+

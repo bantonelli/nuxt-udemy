@@ -30,6 +30,7 @@ export default {
   ** Global CSS
   */
   css: [
+    '~assets/styles/main.css'
   ],
 
   /*
@@ -64,5 +65,9 @@ export default {
   },
   env: {
     firebaseUrl: process.env.FIREBASE_URL || backends.firebase 
+  },
+  transition: {
+    name: 'fade',
+    mode: 'out-in'
   }
 }
