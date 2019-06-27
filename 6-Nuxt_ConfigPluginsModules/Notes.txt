@@ -145,4 +145,58 @@ REGISTERING A DATE FILTER
     - ANY GLOBAL CODE you want to run before application start-up you can CREATE A PLUGIN FOR IT. 
 
 - REGISTERING A VUE FILTER: 
-    - 
+    - Create a new plugin file 
+    - Import Vue 
+    - Call Vue.filter('<nameOfPipeFilter>', filterFunction)
+    - add the plugin file to the Nuxt config 
+
+
+-------------------
+UNDERSTANDING MODULES  
+-------------------
+MODULES: 
+- Allow you to add convenience features to the Nuxt app. 
+- Modules can be created by anyone in the community 
+- You can find instructions on how to create a module on the official Nuxt pages. 
+
+INSTALLING A MODULE: 
+- Install via npm as normal  
+- After installing you usually just add the npm package name as a string to the 
+config.modules array.
+- Also some modules allow special nuxt config properties. 
+    - EXAMPLE:
+        - With @nuxtjs/axios you get access to the config.axios property
+
+USING A MODULE: 
+- Modules get registered to the global Vue instance 
+- You don't need to import axios anymore either because it is injected via the module.  
+- EXAMPLE: Nuxt Axios package 
+    - Inside a component/page/store 
+        this.$axios.$get() 
+    - Inside nuxtServerInit() / asyncData()
+        context.app.$axios.$get() 
+
+- You can add modules created by others 
+    - Go to these to find modules for anything: 
+    https://github.com/nuxt-community/modules 
+    https://github.com/nuxt-community/awesome-nuxt#modules
+
+- SOME POSSIBILITIES WITH MODULES: 
+    - Axios support 
+    - Adding a CMS (kenticocloud, etc.)
+    - Adding Oauth
+        - setup basic information and some hooks for authenticating 
+    - Adding specialized animations (fullpage.js, etc.)
+    - Component libraries      
+    - Yandex.Metrica (user tracking and app usage metrics)
+    - RSS/JSON feeds 
+    - Build Systems (minification, compression etc.)
+    - Captcha and security 
+    - Google Optimizations and Analytics 
+    - PWA and Static Site Features 
+    - GraphQL integrations 
+    - Local tunneling (like ngrok)
+    - Logging
+    - Sass Loader
+    - Node Modules loader (for client side consumption)   
+    - Much more 
