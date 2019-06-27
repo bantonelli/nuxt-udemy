@@ -110,3 +110,39 @@ EXAMPLE OBJECT:
         mode: 'out-in' 
     }
 
+
+-------------------
+ADDING PLUGINS    
+-------------------
+config.plugins 
+- Allows you to load functionality BEFORE the app is fully mounted and rendered
+- You can execute certain code before the app is mounted 
+    - This is important since we don't have access to the main.js file 
+      which is part of normal Vue apps. 
+- USE CASE: Set up component library as 'globally' registered components 
+  so we don't have to import them all over the place. 
+    1) Set up a <plugin>.js file in the ~plugins/ directory 
+    2) Import all of the components into the <plugin>.js file
+    3) Import Vue from 'vue'
+    4) We can now call Vue.component('<nameOfComponent>', componentObject)
+        - Do this for each component 
+    5) add the plugin file in the config file 
+        plugins: [
+            '~plugins/<plugin>.js'
+        ]
+    6) Now that its added here it adds the plugin to the Nuxt mounting/build 
+       process. In this particular use case it means we don't have to register 
+       the components locally. 
+
+
+-------------------
+REGISTERING A DATE FILTER 
+-------------------
+- PREFACE: 
+    - Using plugins as a means to register vue-related plugins and packages is fine 
+    - However, since it allows you to run code before the root Vue object is instantiated 
+      you can do many other things. (Polyfills, 3rd party lib injection, etc.)
+    - ANY GLOBAL CODE you want to run before application start-up you can CREATE A PLUGIN FOR IT. 
+
+- REGISTERING A VUE FILTER: 
+    - 

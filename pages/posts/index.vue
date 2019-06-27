@@ -5,13 +5,9 @@
 </template>
 
 <script>
-import PostList from '~/components/Posts/PostList'
 import setTimeoutPromise from '~/middleware/setTimeoutPromise'
 
 export default {
-    components: {
-        PostList
-    },
     // async fetch (context) {
     //     if (context.store.state.loadedPosts.length !== 0) {
     //         let data = await setTimeoutPromise();
