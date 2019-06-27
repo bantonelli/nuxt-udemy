@@ -1,11 +1,33 @@
 -------------------
-CREATING OUR FIRST NUXT APP
+MODULE INTRODUCTION
 -------------------
+- We'll be learning about middleware through the scope of implementing
+  authentication in Nuxt. 
 
 
 -------------------
-UNDERSTANDING THE FOLDER STRUCTURE
+WHAT IS MIDDLEWARE? 
 -------------------
+- This is a function that is run before a route in the app is loaded. 
+- You can run middleware on a per-route/per-page/per-layout basis 
+
+CREATING MIDDLEWARE: 
+- Just create a JavaScript function that receives the context as a parameter.
+- We can run whatever code we want here. 
+- If running async code inside a middleware then you have to return 
+  the promise that wraps the asynchronous code 
+- If Running sync code you don't have to return anything. 
+- Middleware is executed EITHER on the SERVER OR THE CLIENT 
+    - This is similar to asyncData() and fetch(), where its run on the server on the first execution. 
+
+USING MIDDLEWARE: 
+- 
+
+
+EXAMPLE: 
+export default function (context) {
+    ...
+}
 
 
 -------------------
