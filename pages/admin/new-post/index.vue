@@ -9,7 +9,6 @@
 <script>
 import AdminPostForm from '~/components/Admin/AdminPostForm';
 import axios from 'axios';
-import backends from '~/middleware/backends';
 
 export default {
     components: {

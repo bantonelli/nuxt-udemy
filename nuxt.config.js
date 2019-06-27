@@ -1,4 +1,5 @@
-import pkg from './package'
+import pkg from './package';
+import backends from './middleware/backends';
 
 export default {
   mode: 'universal',
@@ -60,5 +61,8 @@ export default {
     */
     extend(config, ctx) {
     }
+  },
+  env: {
+    firebaseUrl: process.env.FIREBASE_URL || backends.firebase 
   }
 }

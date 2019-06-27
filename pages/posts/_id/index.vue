@@ -15,12 +15,11 @@
 </template>
 
 <script>
-import backends from '~/middleware/backends';
 import axios from 'axios';
 
 export default {
     asyncData(context) {
-      return axios.get(`${backends.firebase}posts/${context.params.id}.json`)
+      return axios.get(`${process.env.firebaseUrl}posts/${context.params.id}.json`)
       .then((res) => {
         // console.log('RESPONSE: ', res.data);
         return {loadedPost: res.data};

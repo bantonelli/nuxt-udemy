@@ -32,25 +32,48 @@ SETTINGS:
             2) this would be just another Nuxt property which 
             is automatically injected into the Vue instance of 
             PAGES ONLY. 
-        
     
 
 
 -------------------
-WHAT CAN WE BUILD WITH NUXT
+MANIPULATING ROUTING SETTINGS  
 -------------------
+config.generate 
+- Property that changes the way Nuxt statically generates pages 
+- Have to work with this when deploying 
 
+config.rootDir
+- Property that is used to set the root directory of the project
+- All your Nuxt files as well as node_modules have to be contained within 
+  this directory for it to work. 
+- default is '/' 
 
--------------------
-WHAT'S INSIDE THE COURSE
--------------------
-
-
--------------------
-HOW TO GET THE MOST OUT OF THIS COURSE 
--------------------
-
-
--------------------
-WHERE TO FIND SOURCE CODE 
--------------------
+config.router 
+- allows you to override some settings of the Nuxt router 
+- You can set ANY of the base vue-router settings here as well since 
+  Nuxt is using that behind the scenes. 
+    - This is basically the vue-router route config with added Nuxt features
+    - You can mess with: linkActiveClass, scrollBehavior, etc. 
+- EXAMPLE: 
+    /*
+        base 
+            - This property is used to set the baseUrl upon which 
+              your app's pages are served. 
+        extendRoutes(routes, resolve)
+            - Nuxt already supplies routes for you based on the directory 
+              structure of the project 
+            - This function allows you to add custom routes to the 
+              routes already supplied by Nuxt. 
+            - the <routes> param is the routes provided by Nuxt. 
+                - You can push normal vue-router route objects onto this 
+                  array. 
+    */
+    router: {
+        base: '/my-app/',
+        extendRoutes(routes, resolve) {
+            routes.push({
+                path: '*', 
+                component: resolve(__dirname + 'pages/index.vue')'
+            });
+        }
+    }
