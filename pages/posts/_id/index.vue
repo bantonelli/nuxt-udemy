@@ -3,7 +3,7 @@
         <section class="post">
             <h1 class="post-title">{{ loadedPost.title }}</h1>
             <div class="post-details">
-                <div class="post-detail">Last Updated on {{loadedPost.updatedDate}}</div>
+                <div class="post-detail">Last Updated on {{loadedPost.updatedDate| date}}</div>
                 <div class="post-detail">Written by {{loadedPost.author}}</div>
             </div>
             <p class="post-content">{{loadedPost.content}}</p>
@@ -15,12 +15,11 @@
 </template>
 
 <script>
-import backends from '~/middleware/backends';
 import axios from 'axios';
 
 export default {
     asyncData(context) {
-      return axios.get(`${backends.firebase}posts/${context.params.id}.json`)
+      return axios.get(`${process.env.firebaseUrl}posts/${context.params.id}.json`)
       .then((res) => {
         // console.log('RESPONSE: ', res.data);
         return {loadedPost: res.data};

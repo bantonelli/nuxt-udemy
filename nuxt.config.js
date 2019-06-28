@@ -1,4 +1,5 @@
-import pkg from './package'
+import pkg from './package';
+import backends from './middleware/backends';
 
 export default {
   mode: 'universal',
@@ -29,12 +30,15 @@ export default {
   ** Global CSS
   */
   css: [
+    '~assets/styles/main.css'
   ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~plugins/core-components.js',
+    '~plugins/date-filter.js'
   ],
 
   /*
@@ -49,6 +53,7 @@ export default {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
+    baseURL: process.env.FIREBASE_URL || backends.firebase
   },
 
   /*
@@ -60,5 +65,12 @@ export default {
     */
     extend(config, ctx) {
     }
+  },
+  env: {
+    firebaseUrl: process.env.FIREBASE_URL || backends.firebase 
+  },
+  transition: {
+    name: 'fade',
+    mode: 'out-in'
   }
 }

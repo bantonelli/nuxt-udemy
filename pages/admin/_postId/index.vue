@@ -9,14 +9,13 @@
 <script>
 import AdminPostForm from '~/components/Admin/AdminPostForm';
 import axios from 'axios';
-import backends from '~/middleware/backends';
 
 export default {
     components: {
         AdminPostForm
     },
     asyncData(context) {
-        return axios.get(`${backends.firebase}posts/${context.params.postId}.json`)
+        return axios.get(`${process.env.firebaseUrl}posts/${context.params.postId}.json`)
         .then((res) => {
             return {loadedPost: {...res.data, id: context.params.postId}};
         })

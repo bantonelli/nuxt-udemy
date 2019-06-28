@@ -1,7 +1,6 @@
 import Vuex from 'vuex';
 import setTimeoutPromise from '~/middleware/setTimeoutPromise';
 import axios from 'axios';
-import backends from '~/middleware/backends';
 
 const createStore = () => {
     return new Vuex.Store({
@@ -29,7 +28,7 @@ const createStore = () => {
                 //     vuexContext.commit('setPosts', data.loadedPosts);
                 // });
                 var newPosts = [];
-                return axios.get(`${backends.firebase}posts.json`)
+                return axios.get(`${process.env.firebaseUrl}posts.json`)
                 .then((res) => {
                     // console.log("RESPONSE DATA: ", res.data);
                     for (const key in res.data) {
@@ -51,13 +50,13 @@ const createStore = () => {
             },
             addPost(vuexContext, post) {
                 const createdPost = {...post, updatedDate: new Date()};
-                return axios.post(`${backends.firebase}posts.json`, createdPost)
+                return axios.post(`${process.env.firebaseUrl}posts.json`, createdPost)
                 .then((res) => {
                     vuexContext.commit('addPost', {...createdPost, id: res.data.name});
                 });
             },
             editPost(vuexContext, editedPost) {
-                return axios.put(`${backends.firebase}posts/${editedPost.id}.json`, editedPost)
+                return axios.put(`${process.env.firebaseUrl}posts/${editedPost.id}.json`, editedPost)
                 .then((res) => {
                     // console.log(res);
                     // this.$router.push('/admin');

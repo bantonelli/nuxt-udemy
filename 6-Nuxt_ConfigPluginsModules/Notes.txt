@@ -32,9 +32,7 @@ SETTINGS:
             2) this would be just another Nuxt property which 
             is automatically injected into the Vue instance of 
             PAGES ONLY. 
-        
     
-
 
 -------------------
 THE LOADING PROPERTY 
@@ -78,12 +76,128 @@ EXAMPLE:
     }
 
 
+-------------------
+MANIPULATING ROUTING SETTINGS  
+-------------------
+config.srcDir
+- Set the source directory of the Nuxt files 
+    - "where are all the source code folders for the Nuxt project" 
+    - This is like rootDir except that it doesn't require node_modules
+- Nuxt will expect folders like assets/, components/,  pages/, etc. to all 
+  be inside of the specified srcDir
+    - Meanwhile config files and node_modules are in the rootDir
+    EXAMPLE: srcDir: 'client-app/'
+
 
 -------------------
-HOW TO GET THE MOST OUT OF THIS COURSE 
--------------------
+ANIMATING PAGE TRANSITIONS
+-------------------   
+config.transition
+- Useful for setting animations during route changes 
+- Values: 
+    - If you pass this a string it will look for CSS classes with the name 
+      of the string passed. 
+    - If you pass an object you can set sub-attributes of the transition as 
+      well as the name of the transition classes.  
+
+EXAMPLE STRING: 
+    transition: 'page'
+
+EXAMPLE OBJECT: 
+    transition: {
+        // sets the CSS classes to be .page-enter, .page-leave-to, etc. 
+        name: 'page', 
+        // makes the page fade out first and the new one come in. 
+        mode: 'out-in' 
+    }
 
 
 -------------------
-WHERE TO FIND SOURCE CODE 
+ADDING PLUGINS    
 -------------------
+config.plugins 
+- Allows you to load functionality BEFORE the app is fully mounted and rendered
+- You can execute certain code before the app is mounted 
+    - This is important since we don't have access to the main.js file 
+      which is part of normal Vue apps. 
+- USE CASE: Set up component library as 'globally' registered components 
+  so we don't have to import them all over the place. 
+    1) Set up a <plugin>.js file in the ~plugins/ directory 
+    2) Import all of the components into the <plugin>.js file
+    3) Import Vue from 'vue'
+    4) We can now call Vue.component('<nameOfComponent>', componentObject)
+        - Do this for each component 
+    5) add the plugin file in the config file 
+        plugins: [
+            '~plugins/<plugin>.js'
+        ]
+    6) Now that its added here it adds the plugin to the Nuxt mounting/build 
+       process. In this particular use case it means we don't have to register 
+       the components locally. 
+
+
+-------------------
+REGISTERING A DATE FILTER 
+-------------------
+- PREFACE: 
+    - Using plugins as a means to register vue-related plugins and packages is fine 
+    - However, since it allows you to run code before the root Vue object is instantiated 
+      you can do many other things. (Polyfills, 3rd party lib injection, etc.)
+    - ANY GLOBAL CODE you want to run before application start-up you can CREATE A PLUGIN FOR IT. 
+
+- REGISTERING A VUE FILTER: 
+    - Create a new plugin file 
+    - Import Vue 
+    - Call Vue.filter('<nameOfPipeFilter>', filterFunction)
+    - add the plugin file to the Nuxt config 
+
+
+-------------------
+UNDERSTANDING MODULES  
+-------------------
+MODULES: 
+- Allow you to add convenience features to the Nuxt app. 
+- Modules can be created by anyone in the community 
+- You can find instructions on how to create a module on the official Nuxt pages. 
+
+INSTALLING A MODULE: 
+- Install via npm as normal  
+- After installing you usually just add the npm package name as a string to the 
+config.modules array.
+- Also some modules allow special nuxt config properties. 
+    - EXAMPLE:
+        - With @nuxtjs/axios you get access to the config.axios property
+
+USING A MODULE: 
+- Modules get registered to the global Vue instance 
+- You don't need to import axios anymore either because it is injected via the module.  
+- EXAMPLE: Nuxt Axios package 
+    - Inside a component/page/store 
+        this.$axios.$get() 
+    - Inside nuxtServerInit() / asyncData()
+        context.app.$axios.$get() 
+
+- You can add modules created by others 
+    - Go to these to find modules for anything: 
+    https://github.com/nuxt-community/modules 
+    https://github.com/nuxt-community/awesome-nuxt#modules
+
+- SOME POSSIBILITIES WITH MODULES: 
+    - Axios support 
+    - Adding a CMS (kenticocloud, etc.)
+    - Adding Oauth
+        - setup basic information and some hooks for authenticating 
+    - Adding specialized animations (fullpage.js, etc.)
+    - Component libraries      
+    - Yandex.Metrica (user tracking and app usage metrics)
+    - RSS/JSON feeds 
+    - Build Systems (minification, compression etc.)
+    - Captcha and security 
+    - Google Optimizations and Analytics 
+    - PWA and Static Site Features 
+    - GraphQL integrations 
+    - Local tunneling (like ngrok)
+    - Logging
+    - Sass Loader
+    - Node Modules loader (for client side consumption)   
+    - Much more 

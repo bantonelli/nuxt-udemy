@@ -11,15 +11,9 @@
 </template>
 
 <script>
-import PostList from '~/components/Posts/PostList';
-import AppButton from '~/components/UI/AppButton';
 import setTimeoutPromise from '~/middleware/setTimeoutPromise.js';
 
 export default {
-    components: {
-        PostList,
-        AppButton
-    },
     layout: 'admin',
     computed: {
         loadedPosts() {

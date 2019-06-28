@@ -8,13 +8,9 @@
 </template>
 
 <script>
-import PostList from "~/components/Posts/PostList";
 import setTimeoutPromise from '~/middleware/setTimeoutPromise';
 
 export default {
-  components: {
-    PostList
-  },
   data() {
     return {};
   },
