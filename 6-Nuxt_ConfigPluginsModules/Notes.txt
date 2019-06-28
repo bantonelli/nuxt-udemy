@@ -37,13 +37,46 @@ SETTINGS:
 
 
 -------------------
-WHAT CAN WE BUILD WITH NUXT
+THE LOADING PROPERTY 
 -------------------
+config.loading: 
+- The property in the config which controls the loading indicator (generated at the top of the screen by Nuxt).
+    - PROPERTIES: 
+        - color, height, duration
+
+config.loadingIndicator: 
+- Property controls the loading indicator for SPA mode. 
+- The duration of this indicator is determined by the client 
+  loading XHR data. 
+    - PROPERTIES: 
+        - name (shape of indicator), color
 
 
+
 -------------------
-WHAT'S INSIDE THE COURSE
+WORKING WITH ENVIRONMENT VARIABLES 
 -------------------
+config.css: []
+- Property is an array of .css files
+- Files included are loaded globally (EVERY PAGE) 
+
+config.build: { extend(config, ctx) {}}
+- This property is where you can add steps to the build process probably 
+  via 3rd party packages/plugins 
+- You can extend the webpack config in the extend() method 
+
+env: {<properties>}
+- This property represents the process.env object 
+- You can add your own environment variables by defining properties 
+  in this object. 
+EXAMPLE: 
+    // declares process.env.baseUrl which is callable within Nuxt components/pages. 
+    // Assigns it the value of either host-provided URL (env.BASE_URL)
+    // or a hard-coded string URL.
+    env {
+        baseUrl: process.env.BASE_URL || 'https://nuxt-blog.firebaseio.com'
+    }
+
 
 
 -------------------
