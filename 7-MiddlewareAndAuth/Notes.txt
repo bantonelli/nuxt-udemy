@@ -287,3 +287,13 @@ SOLUTION:
 -------------------
 FIXING THE LOGOUT TIMER
 -------------------
+- Don't use setLogoutTimer 
+    - Get rid of all places where we use this 
+
+- Rely on check-auth to execute initAuth
+    - check-auth middleware always calls initAuth whenever a new page is loaded 
+        - Since we are checking the validity of the expirationDate all the time 
+          we should just use this date check instead of a timer. Since the timer 
+          will be out of sync on the client and server-side. 
+    - Clear the token in initAuth if the 
+      token is expired. 

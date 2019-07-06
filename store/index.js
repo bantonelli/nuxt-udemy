@@ -89,8 +89,7 @@ const createStore = () => {
 				)
 				.then(res => {
                     // console.log("RESULT: ", res);
-                    vuexContext.commit('setToken', res.idToken);
-                    vuexContext.dispatch('setLogoutTimer', res.expiresIn * 1000);
+                    vuexContext.commit('setToken', res.idToken);                    
                     if (process.client) {
                         localStorage.setItem('token', res.idToken)
                         var expirationDate = (new Date().getTime()) + res.expiresIn * 1000; 
@@ -102,11 +101,6 @@ const createStore = () => {
 				.catch(err => {
 					console.log(err);
 				});
-            },
-            setLogoutTimer(vuexContext, duration) {
-                setTimeout(() => {
-                    vuexContext.commit('clearToken');
-                }, duration);
             },
             initAuth(vuexContext, req) {
                 // Can check if on the server via the request that comes in 
@@ -141,10 +135,21 @@ const createStore = () => {
                     expirationDate = parseInt(localStorage.getItem('tokenExpiration'));
                 }
                 if (new Date().getTime() < expirationDate && token) {
+                    console.log("Valid token!");
                     vuexContext.commit('setToken', token);
-                    vuexContext.dispatch('setLogoutTimer', expirationDate - new Date().getTime());                    
                 } else {
+                    console.log("No Token or invalid token!");
+                    vuexContext.dispatch('logout');
                     return;
+                }
+            },
+            logout(vuexContext) {
+                vuexContext.commit('clearToken');
+                Cookie.remove('jwt');
+                Cookie.remove('expirationDate');
+                if (process.client) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('tokenExpiration');
                 }
             }
         },
