@@ -67,7 +67,8 @@ export default {
     }
   },
   env: {
-    firebaseUrl: process.env.FIREBASE_URL || backends.firebase 
+    firebaseUrl: process.env.FIREBASE_URL || backends.firebase,
+    fbAPIKey: process.env.FB_API_KEY || "AIzaSyCtVZJ0-kdd7NBJHrDlTki9PpI894wEP1M"
   },
   transition: {
     name: 'fade',

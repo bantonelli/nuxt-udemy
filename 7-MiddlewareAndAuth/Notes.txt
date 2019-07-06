@@ -19,32 +19,271 @@ CREATING MIDDLEWARE:
 - If Running sync code you don't have to return anything. 
 - Middleware is executed EITHER on the SERVER OR THE CLIENT 
     - This is similar to asyncData() and fetch(), where its run on the server on the first execution. 
+- EXAMPLE MIDDLEWARE MODULE: 
+    export default function (context) {
+        ...
+    }
+
 
 USING MIDDLEWARE: 
-- 
+- To ensure that the middleware is executed you have to attach it to something
+- The lowest level is one specific page Component. 
+- If you add the same middleware to multiple pages or 
+  layouts it will be executed multiple times. 
+- You can also add middleware globally 
+- Middleware WILL BE EXECUTED WHEREEVER YOU ADD IT. 
+
+- EXAMPLE: USING IN A PAGE
+    // Use the middleware property in the Component instance 
+    // The string should be the name of a middleware file
+    export default {
+        ...
+        middleware: '<myMiddleWareFile>',
+        computed: {...}
+        data: function () {
+            return {
+                ...
+            }
+        }
+        ...
+    }
+
+- EXAMPLE: USING IN A LAYOUT 
+    - Use it similar to a page
+        - Specify the middleware property on the instance 
+        - Pass a string which matches a file name. 
+
+- EXAMPLE: USING MIDDLEWARE ON ALL ROUTES 
+    - In the config.router property 
+    - Specify the middleware key as you would do in a 
+      page or layout 
 
 
-EXAMPLE: 
-export default function (context) {
+
+-------------------
+ADDING USER SIGNUP 
+-------------------
+- Enable email password signup in firebase 
+- Use Firebase REST API for auth 
+    - Use the Auth API endpoint 
+    - Get the API_KEY from the console 
+    - Add a new web app to firebase 
+    - After adding you'll get a config JS script 
+      that includes the API_KEY
+
+PROCESS: 
+- This process will automatically create a new user 
+  on the firebase backend and issue a JWT for that user to 
+  log in with. 
+- Basically this is the "Sign Up" portion of the authentication
+1) Send the post request to the backend 
+    - Request Data Should Include: 
+        - email, password, returnSecureToken: true
+    - Request query parameter should include API_KEY
+2) Handle request response in then and catch errors 
+    - Store the necessary tokens returned for later usage. 
+
+
+
+-------------------
+ADDING USER LOGIN 
+-------------------
+- All we did in this part was dynamically adjust the form's 
+  submission URL depending on the mode of the form. 
+    - If signup mode hit the SignUP API endpoint (relyingparty/signupNewUser?key="") 
+    - If login mode hit the LogIn API endpoint (relyingparty/verifyPassword?key="")
+- The login URL requires the same data parameters and API_KEY
+  in order to work. 
+
+
+-------------------
+STORING THE TOKEN 
+-------------------
+- Now that we have the User created and the API_KEY, we have 
+  to store the token returned by the backend. 
+    - We need to use this token in order to access protected 
+      resources on the application. 
+
+- Protect some API endpoints 
+    - On firebase we will update the rules:
+        - Update the write access so that auth must not be null
+        EXAMPLE: ".write": "auth != null"
+
+- Now send the token we get on login to the backend 
+    - Store the token in the store
+        - Set up a mutation called setToken(state, token)
+            - In this mutation: state.token = token;
+    - Move login and Signup methods to the store as well 
+        - We can consolidate signup and login via the isLogin setting of 
+          the login form.
+        - Just change the endpoint we hit depending on this boolean. 
+        - Otherwise its the same logic: 
+            1) send login/signup request with email, pass, and clientID 
+            2) store the token given by the response to the store by committing 
+               the setToken mutation 
+
+
+-------------------
+USING THE TOKEN FOR AUTHENTICATION 
+-------------------
+- We can send the token in our Store's actions 
+    - Any action that requires write access to the database will 
+        also need to send the token. 
+    - In our other write-based actions we should now be sending along 
+        the stored token so that the backend allows the requests to be performed.
+********* YOU CAN ACCESS THE TOKEN VIA: vuexContext.state.token
+
+
+-------------------
+IMPLEMENTING A MIDDLEWARE
+-------------------
+PROBLEM: 
+- We need to protect routes on the client application 
+
+SOLUTION: 
+- Implement an auth middleware that reroutes the user if they ARE NOT AUTHENTICATED. 
+1) Create a getter on the store isAuthenticated() 
+    - Should return true if there is a valid token stored in the 
+      Vuex Store. 
+2) Set up a middleware that redirects if isAuthenticated is false 
+    // In this case we are redirecting to the login page.
+    export default function (context) {
+        if (!context.store.getters.isAuthenticated) {
+            context.redirect('/admin/auth');
+        }
+    } 
+3) Put this middleware on page components (or a layout)
+    - If you put it on the layout the middleware would be used 
+      for each page that uses that layout 
+    - Any Page that requires authentication should have this: 
+    middleware: ['auth']
+
+FEATURES STILL MISSING: 
+    1) Invalidating expired tokens 
+    2) Persisting the token across page reloads 
+
+
+
+-------------------
+INVALIDATING THE TOKEN 
+-------------------
+- Let's implement invalidating the token if its expired. 
+    - For firebase there is the expiresIn field in the auth response.
+    - expiresIn is measured in seconds so make sure to convert to 
+      milliseconds if needed.  
+
+APPROACH: 
+    - Upon committing the token to the store. We should then 
+      start a timer to invalidate the token. 
+    1) In the authenticateUser() action 
+        - This is where we make the auth request 
+        - When the request successfully comes back commit 'setToken' 
+        - Then also dispatch the action 'setLogoutTimer'
+            vuexContext.dispatch('setLogoutTimer');
+    2) Create the setLogoutTimer action 
+        - This should simply start a setTimout call using the 
+          expiresIn duration in milliseconds.
+        - Inside the setTimout (after the time is complete) commit 
+          'clearToken' 
+    3) Create the clearToken mutation which resets store.state.token  
+       back to null. 
+    
+
+-------------------
+PERSISTING THE TOKEN ACROSS PAGE REFRESHES (PART 1)
+-------------------
+MAIN APPROACH: 
+In a traditional SPA you would: 
+- Store the token in local storage 
+- When the application starts up you would check local storage 
+    to see if there's an existing token. 
+- If its still valid (not expired) load it into the store 
+    and you're good to go.
+- This would work for a SPA because the app renders and initializes on the client 
+  and you can use lifecycle hooks to perform this logic. 
+    - But since we are SSR the app initiliazes on the server
+    - See below for how to handle this. 
+
+APPROACHES FOR NUXT: 
+1) Dispatch action that is checks local storage in a layout 
+    - dispatch an action on the default layout or the initially 
+        loaded layout. 
+    - The action would then perform #1 -> look at local storage and 
+        commit the token if it exists 
+
+2) Use a middleware to dispatch an action which checks for the existence of 
+   the token in localstorage. 
+    
+SOLUTION: Using approach #3
+    1) Upon receiving the token from the backend set the item 
+       to the localstorage. 
+        // in authenticateUser action 
+        ...
+        localStorage.setItem('token', res.idToken);
+        var expirationDate = new Date().getTime() + res.expiresIn * 1000;
+        localStorage.setItem('tokenExpiration', expirationDate);
+        ...
+    2) Add action called initAuth(vuexContext)
+        - check localStorage for the token 
+        const token = localStorage.getItem('token');
+        const expirationDate = localStorage.getItem('tokenExpiration');
+        - check current date against tokenExpiration and set token 
+          in store accordingly. 
+        if (new Date().getTime() > expirationDate || !token) {
+            return;
+        } else {
+            vuexContext.commit('setToken', token);
+        }
+    3) Execute initAuth in the middleware -> check-auth.js 
+        - The first time the page is loaded the middleware will run 
+          on the server-side. 
+            - Make sure that you only execute the action on the client 
+              since the server won't have localStorage defined.
+        EXAMPLE: check-auth.js 
+            ... 
+            if (process.client) {
+                context.store.dispatch('initAuth');
+            }   
+    4) Set the middleware on the layouts or routes that require 
+       authentication. 
+
+**** THE ABOVE WONT WORK FOR US ON THE FIRST PAGE LOAD **** 
+- Our Nuxt app initializes on the server (nuxtServerInit)
+- Because of this there is no local storage to check on the first page load 
+    - This means if the user first loads a protected URL the check-auth middleware wouldn't 
+      run or fail. (depending if you have a process.client check)
+
+
+-------------------
+PERSISTING THE TOKEN ACROSS PAGE REFRESHES (PART 2) - IMPLEMENTING COOKIES 
+-------------------
+- We have to address the first load problem. 
+- To solve this issue we will use cookies 
+- Cookies are sent to the Nuxt server on first page load. 
+    - Basically upon Nuxt initialization there is a GET request sent from 
+      the client to the Nuxt server that should have any cookies that were 
+      previously set by the web-url. (since cookies are stored per-URL in the browser)
+    - If the user delete's these cookies they won't be included of course. 
+    - You can use the context object provided by Nuxt to handle this request 
+      in the middleware or in nuxtServerInit. 
+
+SOLUTION: 
+- Install package to help work with cookies (npm install --save js-cookie)
+    - We can use this package to set and load cookies in JavaScript
+- We will store the token in the cookies at the same time that we store 
+  it in localStorage
+    EXAMPLE: store.js 
     ...
-}
+    import Cookie from 'js-cookie';
+    ...
+    authenticateUser(vuexContext, authData) {
+        ...
+        Cookie.set('jwt', token);
+        Cookie.set('expirationDate', expirationDate); 
+        ...
+    }
 
 
 -------------------
-WHAT CAN WE BUILD WITH NUXT
--------------------
-
-
--------------------
-WHAT'S INSIDE THE COURSE
--------------------
-
-
--------------------
-HOW TO GET THE MOST OUT OF THIS COURSE 
--------------------
-
-
--------------------
-WHERE TO FIND SOURCE CODE 
+FIXING THE LOGOUT TIMER
 -------------------
