@@ -1,5 +1,6 @@
 import pkg from './package';
 import backends from './middleware/backends';
+import bodyParser from 'body-parser';
 
 export default {
   mode: 'universal',
@@ -73,5 +74,9 @@ export default {
   transition: {
     name: 'fade',
     mode: 'out-in'
-  }
+  },
+  serverMiddleware: [
+    bodyParser.json(),
+    '~/api'
+  ]
 }

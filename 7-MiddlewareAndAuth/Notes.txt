@@ -297,3 +297,13 @@ FIXING THE LOGOUT TIMER
           will be out of sync on the client and server-side. 
     - Clear the token in initAuth if the 
       token is expired. 
+
+
+-------------------
+ADDING LOGOUT FUNCTIONALITY 
+-------------------
+- APPROACH: 
+    - Create a logout action that: 
+        - removes token and expiration from cookies 
+        - removes token and expiration from localstorage 
+        - calls clearToken mutation (which removes it from the store)

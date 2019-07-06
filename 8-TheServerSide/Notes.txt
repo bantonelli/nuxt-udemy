@@ -1,21 +1,88 @@
 -------------------
-CREATING OUR FIRST NUXT APP
+MODULE INTRODUCTION 
 -------------------
+- Nuxt is there to give you Universal Vue Applications 
+- It does have the ability to interface with Node/Express but 
+  its main purpose is to prepare/build your app in different ways. 
+- You shouldn't have too much server-side logic on the Nuxt 
+  server for the most part. 
 
 
 -------------------
-UNDERSTANDING THE FOLDER STRUCTURE
+ADDING SERVER MIDDLEWARE 
 -------------------
+- This is NOT THE SAME AS the client middleware we have been 
+  using thus far. 
+- A collection of Node and Express compliant middlewares 
+    - These are executed BEFORE the Nuxt process gets started.
+    - The server-side middleware is decoupled from 
+      the Nuxt rendering processes (for the most part)
+- You can go as far as you want. Here are some use-cases: 
+    1) Gathering Client analytics data and storing that on a 
+       separate analytic database
+       - You can import mongoose, create models, etc. 
+    2) You can create a separate API used ONLY on the client 
+
+
+
+ADDING SERVER MIDDLEWARE: 
+- You can specify the server middleware in the nuxt.config.js
+- Any custom middleware or normal Express middleware should be 
+  specified here. 
+- The middleware will be executed in the order specified on the 
+  array. 
+    - So you should put function calls in the array as needed.
+
+    EXAMPLE: body-parser 
+    // nuxt.config.js
+    const bodyParser = require('body-parser');
+    ...
+    serverMiddleware: [
+        bodyParser.json()
+    ]
+
+- Just pass in the functions/files that you wish to run as middleware. 
+// api/index.js is our custom middleware 
+serverMiddleware: [
+    bodyParser.json(),
+    '~/api'
+]
 
 
 -------------------
-WHAT CAN WE BUILD WITH NUXT
+TESTING THE MIDDLEWARE 
 -------------------
+- We want to send a request to track data whenever the 
+  user logs in. 
+- We can test our middleware in our Nuxt application 
+    - Send an additional POST request whenever our authentication 
+      has succeeded. 
 
 
 -------------------
-WHAT'S INSIDE THE COURSE
+STARTING A PROJECT WITH A SERVER-SIDE TEMPLATE 
 -------------------
+- If you know that you are going to have to write A LOT of server-side code 
+  you should use a different create-nuxt-app template. 
+    - You can use a different template to match what you need 
+
+EXPRESS TEMPLATE: 
+- Comes with a better integration of Express 
+- Makes creating your own client-side API a bit easier 
+    - All the required boilerplate is done for you 
+- The project comes with all of the same stuff it just has
+  a few additional things: 
+    - /server (directory) 
+    - /server/index.js (file)
+        - This file sets up the express app() and starts 
+          the Nuxt process.
+        - You still wrap a standalone SPA but you have the 
+          ability to make requests to the Client server 
+        - Nuxt and Vue is NOT the templating engine used by 
+          the Express router. 
+            - Nuxt will pre-render Vue routes ONLY. 
+
+
 
 
 -------------------
