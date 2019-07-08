@@ -1,28 +1,210 @@
 -------------------
-CREATING OUR FIRST NUXT APP
+UNIVERSAL VS. SPA VS. STATIC
 -------------------
+- We have 3 different deployment and generation options 
+
+UNIVERSAL APP: 
+- This is the mode that builds and ships to a Node.js Server 
+    - First view is rendered dynamically on the server. 
+    - After first load, Application turns into a SPA 
+    - Great for SEO 
+- Node.js Host is required
+
+SPA: 
+- App starts after first load. 
+    - It ships the index.html file to the client 
+    - App stays SPA and is loaded and rendered on the client 
+    - Like a normal Vue App but simplified for development 
+- Normal Static host is required: 
+    - Can use AWS, HostGator, w/e 
+    - Just needs to serve HTML, CSS and JS 
+
+
+STATIC APP: 
+- Pre-render the views during development (ahead of time)
+- Ship a bunch of pre-generated HTML, JS and CSS files 
+    - Will have prepopulated content. 
+    - After first load, Application turns into SPA 
+    - Great for SEO 
+- Normal Static host is required: 
+    - Can use AWS, HostGator, w/e 
+    - Just needs to serve HTML, CSS and JS 
+
+
+
+-------------------
+BUILDING AS A UNIVERSAL APP 
+-------------------
+1) Make sure the nuxt.config is set up 
+    mode: 'universal'
+2) Execute Build Script (nuxt build)
+    - This will give you a folder which you should deploy 
+      in the end. 
+    - You will get the .nuxt folder 
+3) Execute Server Startup script (nuxt start)
+    - This will start the server 
+        - Make sure the host runs this script 
+    - This will run the app in the same way as in dev mode 
+      except the code that is used has been optimized via the 
+      build script. 
+4) Deployment: 
+    - You would need to push the entire repo of files to the 
+      host including package.json AND .nuxt/ directory  
+        - some also require node_modules/
+    - You then run npm build and then npm start on that server. 
 
 
 -------------------
-UNDERSTANDING THE FOLDER STRUCTURE
+BUILDING OUR APP AS A SPA 
 -------------------
+1) Make sure the nuxt.config is set up 
+    mode: 'spa'
+2) Execute the Build Script 
+    - We will get a dist/ folder 
+    - This will be the only files that need to be deployed 
+      for the app. 
+3) Deploy to a static host 
+    - Copy all the content of the dist/ folder 
+        - Not the folder itself. 
+
+GOTCHAS: 
+- If you're building the app for the SPA mode you cannot 
+  rely on nuxtServerInit() 
+    - Use normal lifecycle hooks provided by Vue. 
+- You can't go to separate URLs without having index.html hosted 
+    - Basically you should set your host up to serve index.html 
+      at EVERY URL. 
+    - This allows Vue to take over and parse the URL properly
+
+
+
+-------------------
+FETCHING DATA IN THE SPA
+-------------------
+- Instead of nuxtServerInit you can: 
+    1) Add asyncData() / fetch() to the page components 
+        - Reach out to the backend in all of them 
+    2) Use the created() or mounted() lifecycle hook Vue.js provides 
+        - Add this to the layouts/pages preferably. 
+
+    
+    
+-------------------
+BUILDING YOUR APP AS A STATIC WEBSITE  
+-------------------
+WHAT IS THIS? 
+- The ability to generate the entire app as static files which 
+  we can deploy to a static host. 
+
+1) Make sure the nuxt.config is set up 
+    mode: 'universal'
+2) Run generate command (npm run generate)
+    - In universal mode it will generate all the pages 
+    - Outputs a dist folder 
+        - You have a index.html file for each of the pages 
+        - All of the initial content (from nuxtServerInit) 
+          we be loaded into the .html files 
+    - Once you load the first page. If you click around it 
+      will then turn into a SPA. 
+        - EVERY SINGLE ENTRY POINT will have pregenerated data. 
+
+BENEFITS: 
+    - Best of both worlds
+    - This will also come with great SEO. 
+    - You DONT NEED a NodeJS host either.
+
+GOTCHAS: 
+    - Dynamic routes with params will not be auto-generated 
 
 
 -------------------
-WHAT CAN WE BUILD WITH NUXT
+IMPROVING THE GENERATE PROCESS 
 -------------------
+- You can specify dynamic routes to be pregenerated
+
+SPECIFYING DYNAMIC ROUTES: 
+- In the nuxt.config file: 
+    generate: {
+        routes: function () {
+            return [
+                '/posts/<someID>'
+            ];
+        }
+    }
+    // The function should return an array of dynamic routes 
+    // Each route specified will be generated in the dist/ 
+- If you want to get all available dynamic params (like post IDs)
+  you can always make an axios request right inside the function.
+  And produce the array of routes to generate. 
+    EXAMPLE: 
+        generate: {
+            routes: function () {
+                return axios.get('https://nuxt-blog.firebaseio.com/posts.json')
+                .then((res) => {
+                    const routes = [];
+                    for (const key in res.data) {
+                        routes.push('/posts/' + key);
+                    }
+                    return routes;
+                }); 
+            }
+        }
 
 
 -------------------
-WHAT'S INSIDE THE COURSE
+LIMITING THE AMOUNT OF HTTP REQUESTS 
 -------------------
+- Push an object into the routes array 
+- This object has configuration properties that allow for more 
+  features.
 
+PROBLEM: 
+- Using our solution from above we would be making redundant requests 
+  to the POST endpoint.
+    - It hits it in the config and then hits it again to load the data from the 
+      posts themselves. 
 
--------------------
-HOW TO GET THE MOST OUT OF THIS COURSE 
--------------------
+SOLUTION: 
+- We can consolidate the requests by simply USING ALL THE DATA RETURNED 
+  BY THE post ENDPOINT in the config. 
+- In components that make asyncData() requests for post data: 
+    - we can check the context object passed to asyncData to see if there is a 
+    payload passed to the page via the generate process. 
+    - The payload is specified in the config. (SEE EXAMPLE BELOW)
 
+EXAMPLE: 
+// nuxt.config.js 
+    generate: {
+        routes: function () {
+            return axios.get('https://nuxt-blog.firebaseio.com/posts.json')
+            .then((res) => {
+                const routes = [];
+                for (const key in res.data) {
+                    routes.push({
+                        route: '/posts/' + key,
+                        // The payload is the response data for a post ID (key)
+                        payload: {postData: res.data[key]}
+                    });
+                }
+                return routes;
+            }); 
+        }
+    }
 
--------------------
-WHERE TO FIND SOURCE CODE 
--------------------
+// posts/_id/index.vue 
+export default {
+    ...
+    asyncData(context) {
+        if (context.payload) {
+
+        }
+        return context.app.$axios.$get('/posts/' + context.params.id + '.json')
+        .then((data) => {
+            return {
+                loadedPost: data
+            }
+        })
+        .catch((err) => {context.error(err)});
+    }        
+    ...
+}
